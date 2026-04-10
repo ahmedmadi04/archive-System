@@ -1,0 +1,2 @@
+STATUS 400
+{"success":false,"message":"Validation errors","errors":[{"type":"field","msg":"Please provide a valid email","path":"email","location":"body"}]}

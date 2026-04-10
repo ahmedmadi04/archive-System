@@ -45,6 +45,11 @@
             grid-template-columns: 260px 1fr 420px;
             grid-template-rows: 70px 1fr;
             height: 100vh;
+            transition: grid-template-columns 0.3s ease;
+        }
+
+        .app-container.document-viewer-collapsed {
+            grid-template-columns: 260px 1fr 0px;
         }
 
         .app-header {
@@ -169,6 +174,28 @@
         .btn-logout:hover {
             background: #c0392b;
             transform: translateY(-2px);
+        }
+
+        .btn-toggle-sidebar {
+            padding: 10px 15px;
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+        }
+
+        .btn-toggle-sidebar:hover {
+            background: var(--bg-lighter);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .btn-toggle-sidebar.active {
+            background: var(--primary-color);
+            color: white;
         }
 
         .sidebar {
@@ -422,6 +449,13 @@
             border-left: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .pdf-panel.collapsed {
+            width: 0;
+            border-left: none;
         }
 
         .pdf-header {
@@ -680,6 +714,71 @@
             color: var(--text-secondary);
         }
 
+        /* Data Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            background: var(--bg-light);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .data-table tr:hover {
+            background: var(--bg-light);
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-badge.active {
+            background: rgba(39, 174, 96, 0.2);
+            color: var(--success);
+        }
+
+        .status-badge.inactive {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--danger);
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-icon:hover {
+            background: var(--bg-light);
+            color: var(--text-primary);
+        }
+
+        .btn-icon:hover:nth-child(1) {
+            color: var(--warning);
+        }
+
+        .btn-icon:hover:nth-child(2) {
+            color: var(--danger);
+        }
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -911,7 +1010,7 @@
         <header class="app-header">
             <div class="logo-section">
                 <div class="logo-circle">
-                    <img src="logo.png" alt="Mabruk Oil" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;">
+                    <img src="logo.png.png" alt="Mabruk Oil" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;">
                 </div>
                 <div class="app-title">
                     <h1>Mabruk Oil Operations</h1>
@@ -930,6 +1029,9 @@
             </div>
 
             <div class="header-actions">
+                <button class="btn-toggle-sidebar" onclick="toggleDocumentViewer()" title="Toggle Document Viewer">
+                    <i class="fas fa-file-pdf"></i>
+                </button>
                 <div class="user-info">
                     <div class="user-avatar" id="userAvatar">R</div>
                     <div class="user-details">
@@ -966,6 +1068,12 @@
             <div class="nav-item" onclick="showPage('settings')">
                 <i class="fas fa-cog"></i>
                 <span>Settings</span>
+            </div>
+            
+            <div class="nav-section-title" id="adminSection" style="display: none;">Admin</div>
+            <div class="nav-item" id="adminNav" style="display: none;" onclick="showPage('admin')">
+                <i class="fas fa-user-shield"></i>
+                <span>User Management</span>
             </div>
         </aside>
 
@@ -1117,7 +1225,7 @@
                     </div>
                     <div class="info-row">
                         <div class="info-label">Database</div>
-                        <div class="info-value">JSON File Storage</div>
+                        <div class="info-value">MongoDB</div>
                     </div>
                     <div class="info-row">
                         <div class="info-label">Logged in as</div>
@@ -1125,7 +1233,28 @@
                     </div>
                     <div class="info-row">
                         <div class="info-label">Access Level</div>
-                        <div class="info-value">Administrator</div>
+                        <div class="info-value" id="settingsRole">Administrator</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Page -->
+            <div class="page-content" id="page-admin">
+                <div class="content-header">
+                    <h2 class="content-title"><i class="fas fa-user-shield"></i> User Management</h2>
+                    <button class="btn btn-primary" onclick="openAddUserModal()">
+                        <i class="fas fa-plus"></i>
+                        Add New User
+                    </button>
+                </div>
+
+                <div class="report-card">
+                    <h3 style="margin-bottom: 20px;">User List</h3>
+                    <div id="usersTable">
+                        <div class="loading-state" style="display: block;">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Loading users...</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1223,6 +1352,47 @@
         </div>
     </div>
 
+    <!-- Add User Modal -->
+    <div class="modal" id="addUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New User</h3>
+                <button class="close-modal" onclick="closeAddUserModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addUserForm">
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-input" id="newUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" id="newEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-input" id="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Role</label>
+                        <select class="form-input" id="newRole" required>
+                            <option value="">Select Role</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAddUserModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="submitAddUser()">
+                    <i class="fas fa-user-plus"></i>
+                    Add User
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Notification -->
     <div class="notification" id="notification">
         <i class="fas fa-check-circle"></i>
@@ -1237,20 +1407,55 @@
         let selectedForm = null;
         let currentPDFUrl = null;
         let currentPage = 'action-forms';
+        let documentViewerCollapsed = false;
+
+        function toggleDocumentViewer() {
+            const appContainer = document.querySelector('.app-container');
+            const pdfPanel = document.querySelector('.pdf-panel');
+            const toggleBtn = document.querySelector('.btn-toggle-sidebar');
+            
+            documentViewerCollapsed = !documentViewerCollapsed;
+            
+            if (documentViewerCollapsed) {
+                appContainer.classList.add('document-viewer-collapsed');
+                pdfPanel.classList.add('collapsed');
+                toggleBtn.classList.add('active');
+            } else {
+                appContainer.classList.remove('document-viewer-collapsed');
+                pdfPanel.classList.remove('collapsed');
+                toggleBtn.classList.remove('active');
+            }
+        }
+
+        let currentUserRole = null;
 
         async function checkAuth() {
             try {
-                const response = await fetch('/api/check-auth');
+                const response = await fetch('/api/auth/check-auth', {
+                    credentials: 'include',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                    }
+                });
                 const data = await response.json();
                 
                 if (!data.authenticated) {
+                    localStorage.removeItem('authToken');
                     window.location.href = '/index.html';
                     return;
                 }
                 
+                currentUserRole = data.role;
                 document.getElementById('userName').textContent = data.username;
                 document.getElementById('settingsUser').textContent = data.username;
+                document.getElementById('settingsRole').textContent = data.role;
                 document.getElementById('userAvatar').textContent = data.username.charAt(0).toUpperCase();
+                
+                // Show admin nav if user is admin
+                if (currentUserRole === 'ADMIN') {
+                    document.getElementById('adminNav').style.display = 'flex';
+                    document.getElementById('adminSection').style.display = 'block';
+                }
                 
                 loadForms();
             } catch (error) {
@@ -1264,7 +1469,12 @@
                 document.getElementById('emptyState').style.display = 'none';
                 document.getElementById('tableContainer').style.display = 'none';
 
-                const response = await fetch('/api/forms');
+                const response = await fetch('/api/forms', {
+                    credentials: 'include',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                    }
+                });
                 const forms = await response.json();
                 
                 currentForms = forms;
@@ -1572,7 +1782,12 @@
             
             searchTimeout = setTimeout(async () => {
                 try {
-                    const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+                    const response = await fetch(`/api/forms/search?q=${encodeURIComponent(query)}`, {
+                        credentials: 'include',
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                        }
+                    });
                     const results = await response.json();
                     renderTable(results);
                 } catch (error) {
@@ -1622,8 +1837,12 @@
             formData.append('pdfFile', document.getElementById('pdfFile').files[0]);
 
             try {
-                const response = await fetch('/api/upload', {
+                const response = await fetch('/api/forms', {
                     method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                    },
                     body: formData
                 });
 
@@ -1649,7 +1868,11 @@
 
             try {
                 const response = await fetch(`/api/forms/${id}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    credentials: 'include',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                    }
                 });
 
                 const data = await response.json();
@@ -1683,9 +1906,17 @@
             }
 
             try {
-                await fetch('/api/logout', { method: 'POST' });
-                window.location.href = '/index.html';
+                await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                    }
+                });
             } catch (error) {
+                console.error('Logout error:', error);
+            } finally {
+                localStorage.removeItem('authToken');
                 window.location.href = '/index.html';
             }
         }
@@ -1720,14 +1951,234 @@
             return new Date(dateString).toLocaleDateString('en-US', options);
         }
 
+        // Admin functions
+        async function loadUsers() {
+            try {
+                const response = await fetch('/api/admin/users', {
+                    credentials: 'include',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                    }
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    renderUsersTable(data.data);
+                } else {
+                    showNotification('error', 'Error', 'Failed to load users');
+                }
+            } catch (error) {
+                showNotification('error', 'Error', 'Failed to load users');
+                console.error('Load users error:', error);
+            }
+        }
+
+        function renderUsersTable(users) {
+            const usersTable = document.getElementById('usersTable');
+            usersTable.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Last Login</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${users.map(user => `
+                            <tr>
+                                <td>${user.username}</td>
+                                <td>${user.email}</td>
+                                <td>${user.role ? user.role.name : 'N/A'}</td>
+                                <td><span class="status-badge ${user.isActive ? 'active' : 'inactive'}">${user.isActive ? 'Active' : 'Inactive'}</span></td>
+                                <td>${user.lastLogin ? formatDate(user.lastLogin) : 'Never'}</td>
+                                <td>
+                                    <button class="btn-icon" onclick="toggleUserStatus('${user._id}', ${user.isActive})" title="${user.isActive ? 'Deactivate' : 'Activate'}">
+                                        <i class="fas ${user.isActive ? 'fa-ban' : 'fa-check'}"></i>
+                                    </button>
+                                    <button class="btn-icon" onclick="deleteUser('${user._id}')" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        async function loadRoles() {
+            try {
+                const response = await fetch('/api/admin/roles', {
+                    credentials: 'include',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                    }
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    const roleSelect = document.getElementById('newRole');
+                    roleSelect.innerHTML = '<option value="">Select Role</option>';
+                    data.data.forEach(role => {
+                        roleSelect.innerHTML += `<option value="${role._id}">${role.name}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Load roles error:', error);
+            }
+        }
+
+        function openAddUserModal() {
+            loadRoles();
+            document.getElementById('addUserModal').classList.add('active');
+        }
+
+        function closeAddUserModal() {
+            document.getElementById('addUserModal').classList.remove('active');
+            document.getElementById('addUserForm').reset();
+        }
+
+        async function submitAddUser() {
+            const form = document.getElementById('addUserForm');
+            
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const userData = {
+                username: document.getElementById('newUsername').value,
+                email: document.getElementById('newEmail').value,
+                password: document.getElementById('newPassword').value,
+                roleId: document.getElementById('newRole').value
+            };
+
+            try {
+                const response = await fetch('/api/admin/users', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showNotification('success', 'Success', 'User added successfully');
+                    closeAddUserModal();
+                    loadUsers();
+                } else {
+                    showNotification('error', 'Error', data.message || 'Failed to add user');
+                }
+            } catch (error) {
+                showNotification('error', 'Error', 'Failed to add user');
+                console.error('Add user error:', error);
+            }
+        }
+
+        async function toggleUserStatus(userId, currentStatus) {
+            const action = currentStatus ? 'deactivate' : 'activate';
+            if (!confirm(`Are you sure you want to ${action} this user?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/users/${userId}/status`, {
+                    method: 'PATCH',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                    },
+                    body: JSON.stringify({ isActive: !currentStatus })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showNotification('success', 'Success', `User ${action}d successfully`);
+                    loadUsers();
+                } else {
+                    showNotification('error', 'Error', data.message || `Failed to ${action} user`);
+                }
+            } catch (error) {
+                showNotification('error', 'Error', `Failed to ${action} user`);
+                console.error('Toggle user status error:', error);
+            }
+        }
+
+        async function deleteUser(userId) {
+            if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/users/${userId}`, {
+                    method: 'DELETE',
+                    credentials: 'include',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showNotification('success', 'Deleted', 'User deleted successfully');
+                    loadUsers();
+                } else {
+                    showNotification('error', 'Error', data.message || 'Failed to delete user');
+                }
+            } catch (error) {
+                showNotification('error', 'Error', 'Failed to delete user');
+                console.error('Delete user error:', error);
+            }
+        }
+
+        function showPage(pageName) {
+            // Hide all pages
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Remove active from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Show selected page
+            document.getElementById(`page-${pageName}`).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            currentPage = pageName;
+            
+            // Load data for specific pages
+            if (pageName === 'admin') {
+                loadUsers();
+            }
+            
+            showNotification('info', 'Navigation', `Viewing ${pageName.replace('-', ' ')}`);
+        }
+
         window.onclick = function(event) {
             const uploadModal = document.getElementById('uploadModal');
             const employeeModal = document.getElementById('employeeModal');
+            const addUserModal = document.getElementById('addUserModal');
             if (event.target === uploadModal) {
                 closeUploadModal();
             }
             if (event.target === employeeModal) {
                 closeEmployeeModal();
+            }
+            if (event.target === addUserModal) {
+                closeAddUserModal();
             }
         }
 
