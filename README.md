@@ -79,7 +79,7 @@ The server will start on `http://localhost:3000`
 ## Default Admin Account
 
 After seeding, you can login with:
-- **Email**: admin@example.com
+- **Email**: admin
 - **Password**: admin123
 
 ## API Documentation
