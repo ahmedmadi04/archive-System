@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+.DS_Store
+uploads/*
+!uploads/.gitkeep
+package-lock.json
+*.log
+.gemini/

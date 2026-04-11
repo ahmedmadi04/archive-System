@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Mabruk Oil Operations</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -30,6 +33,66 @@
             --warning: #f39c12;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+            --transition: all 0.3s ease;
+        }
+
+        body.light-mode {
+            --bg-dark: #f8f9fa;
+            --bg-darker: #ffffff;
+            --bg-light: #f1f3f5;
+            --bg-lighter: #e9ecef;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #868e96;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* RTL Support */
+        body.rtl {
+            direction: rtl;
+            font-family: 'Noto Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body.rtl .sidebar {
+            border-right: none;
+            border-left: 1px solid var(--border-color);
+        }
+
+        body.rtl .nav-item {
+            border-left: none;
+            border-right: 3px solid transparent;
+        }
+
+        body.rtl .nav-item:hover,
+        body.rtl .nav-item.active {
+            border-left-color: transparent;
+            border-right-color: var(--primary-color);
+        }
+
+        body.rtl .search-bar {
+            padding: 12px 50px 12px 20px;
+        }
+
+        body.rtl .search-icon {
+            left: auto;
+            right: 18px;
+        }
+
+        body.rtl .header-actions {
+            margin-left: 0;
+            margin-right: auto;
+        }
+
+        body.rtl .btn-toggle-sidebar {
+            margin-right: 0;
+            margin-left: 15px;
+        }
+
+        body.rtl .pdf-panel {
+            border-left: none;
+            border-right: 1px solid var(--border-color);
         }
 
         body {
@@ -38,6 +101,7 @@
             color: var(--text-primary);
             overflow: hidden;
             height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .app-container {
@@ -225,7 +289,8 @@
             border-left: 3px solid transparent;
         }
 
-        .nav-item:hover, .nav-item.active {
+        .nav-item:hover,
+        .nav-item.active {
             background: var(--bg-light);
             color: var(--text-primary);
             border-left-color: var(--primary-color);
@@ -686,23 +751,40 @@
                 opacity: 0;
                 transform: translateX(100px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
             }
         }
 
-        .notification.success { border-left-color: var(--success); }
-        .notification.error { border-left-color: var(--danger); }
-        .notification.info { border-left-color: var(--info); }
+        .notification.success {
+            border-left-color: var(--success);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger);
+        }
+
+        .notification.info {
+            border-left-color: var(--info);
+        }
 
         .notification i {
             font-size: 24px;
         }
 
-        .notification.success i { color: var(--success); }
-        .notification.error i { color: var(--danger); }
-        .notification.info i { color: var(--info); }
+        .notification.success i {
+            color: var(--success);
+        }
+
+        .notification.error i {
+            color: var(--danger);
+        }
+
+        .notification.info i {
+            color: var(--info);
+        }
 
         .notification-content h4 {
             font-size: 14px;
@@ -807,7 +889,54 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-light) 25%, var(--bg-lighter) 50%, var(--bg-light) 75%);
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton-text {
+            height: 24px;
+            width: 60%;
+            margin-top: 8px;
+            display: inline-block;
+        }
+
+        .skeleton-chart-bar {
+            flex: 1;
+            margin: 0 5px;
+            min-height: 20px;
+            border-radius: 6px 6px 0 0;
+            background: linear-gradient(180deg, rgba(44, 140, 122, 0.2), rgba(44, 140, 122, 0.05));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skeleton-chart-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            animation: skeleton-loading 1.5s infinite;
         }
 
         ::-webkit-scrollbar {
@@ -1005,75 +1134,75 @@
         }
     </style>
 </head>
+
 <body>
     <div class="app-container">
         <header class="app-header">
             <div class="logo-section">
                 <div class="logo-circle">
-                    <img src="logo.png.png" alt="Mabruk Oil" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;">
+                    <img src="logo.png.png" alt="Mabruk Oil"
+                        style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%;">
                 </div>
                 <div class="app-title">
-                    <h1>Mabruk Oil Operations</h1>
-                    <p>HR Management System</p>
+                    <h1 data-i18n="app_title">Mabruk Oil Operations</h1>
+                    <p data-i18n="app_subtitle">HR Management System</p>
                 </div>
             </div>
 
             <div class="search-bar-container">
                 <i class="fas fa-search search-icon"></i>
-                <input 
-                    type="text" 
-                    class="search-bar" 
-                    id="searchInput"
+                <input type="text" class="search-bar" id="searchInput"
                     placeholder="Search by Employee ID, Name, or Action Code..."
-                    autocomplete="off">
+                    data-i18n-placeholder="search_placeholder" autocomplete="off">
             </div>
 
             <div class="header-actions">
-                <button class="btn-toggle-sidebar" onclick="toggleDocumentViewer()" title="Toggle Document Viewer">
+                <button class="btn-toggle-sidebar" onclick="toggleDocumentViewer()" title="Toggle Document Viewer"
+                    data-i18n-title="toggle_viewer">
                     <i class="fas fa-file-pdf"></i>
                 </button>
                 <div class="user-info">
                     <div class="user-avatar" id="userAvatar">R</div>
                     <div class="user-details">
                         <div class="user-name" id="userName">Rfarg</div>
-                        <div class="user-role">HR Administrator</div>
+                        <div class="user-role" id="userRoleDisplay">HR Administrator</div>
                     </div>
                 </div>
                 <button class="btn-logout" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+                    <i class="fas fa-sign-out-alt"></i> <span data-i18n="logout">Logout</span>
                 </button>
             </div>
         </header>
 
         <aside class="sidebar">
-            <div class="nav-section-title">Main Menu</div>
+            <div class="nav-section-title" data-i18n="main_menu">Main Menu</div>
             <div class="nav-item active" onclick="showPage('action-forms')">
                 <i class="fas fa-file-alt"></i>
-                <span>Action Forms</span>
+                <span data-i18n="nav_forms">Action Forms</span>
             </div>
             <div class="nav-item" onclick="showPage('reports')">
                 <i class="fas fa-chart-bar"></i>
-                <span>Reports</span>
+                <span data-i18n="nav_reports">Reports</span>
             </div>
             <div class="nav-item" onclick="showPage('employees')">
                 <i class="fas fa-users"></i>
-                <span>Employees</span>
+                <span data-i18n="nav_employees">Employees</span>
             </div>
-            
-            <div class="nav-section-title">Tools</div>
+
+            <div class="nav-section-title" data-i18n="tools">Tools</div>
             <div class="nav-item" onclick="showPage('archive')">
                 <i class="fas fa-archive"></i>
-                <span>Archive</span>
+                <span data-i18n="nav_archive">Archive</span>
             </div>
             <div class="nav-item" onclick="showPage('settings')">
                 <i class="fas fa-cog"></i>
-                <span>Settings</span>
+                <span data-i18n="nav_settings">Settings</span>
             </div>
-            
-            <div class="nav-section-title" id="adminSection" style="display: none;">Admin</div>
+
+            <div class="nav-section-title" id="adminSection" style="display: none;" data-i18n="admin_menu">Admin</div>
             <div class="nav-item" id="adminNav" style="display: none;" onclick="showPage('admin')">
                 <i class="fas fa-user-shield"></i>
-                <span>User Management</span>
+                <span data-i18n="nav_admin">User Management</span>
             </div>
         </aside>
 
@@ -1081,64 +1210,66 @@
             <!-- Action Forms Page -->
             <div class="page-content active" id="page-action-forms">
                 <div class="content-header">
-                    <h2 class="content-title">Employee Action Forms</h2>
+                    <h2 class="content-title" data-i18n="forms_title">Employee Action Forms</h2>
                     <button class="btn btn-primary" onclick="openUploadModal()">
                         <i class="fas fa-plus"></i>
-                        Upload New Form
+                        <span data-i18n="btn_upload">Upload New Form</span>
                     </button>
                 </div>
 
                 <div class="stats-grid">
                     <div class="stat-card">
                         <i class="fas fa-file-alt stat-icon"></i>
-                        <div class="stat-label">Total Forms</div>
+                        <div class="stat-label" data-i18n="stat_total">Total Forms</div>
                         <div class="stat-value" id="totalForms">0</div>
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-calendar-day stat-icon"></i>
-                        <div class="stat-label">This Month</div>
+                        <div class="stat-label" data-i18n="stat_month">This Month</div>
                         <div class="stat-value" id="monthForms">0</div>
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-users stat-icon"></i>
-                        <div class="stat-label">Employees</div>
+                        <div class="stat-label" data-i18n="stat_employees">Employees</div>
                         <div class="stat-value" id="totalEmployees">0</div>
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-check-circle stat-icon"></i>
-                        <div class="stat-label">Active Forms</div>
+                        <div class="stat-label" data-i18n="stat_active">Active Forms</div>
                         <div class="stat-value" id="activeForms">0</div>
                     </div>
                 </div>
 
                 <div class="results-section">
                     <div class="results-header">
-                        <div class="results-title">Action Forms Registry</div>
-                        <div class="results-count"><span id="resultCount">0</span> Records</div>
+                        <div class="results-title" data-i18n="registry_title">Action Forms Registry</div>
+                        <div class="results-count"><span id="resultCount">0</span> <span
+                                data-i18n="records">Records</span></div>
                     </div>
 
                     <div id="loadingState" class="loading">
                         <div class="spinner"></div>
-                        <p style="color: var(--text-muted);">Loading records...</p>
+                        <p style="color: var(--text-muted);" data-i18n="loading">Loading records...</p>
                     </div>
 
                     <div id="emptyState" class="empty-state" style="display: none;">
                         <i class="fas fa-folder-open"></i>
-                        <h3>No Forms Yet</h3>
-                        <p>Upload your first action form to get started</p>
+                        <h3 data-i18n="empty_title">No Forms Yet</h3>
+                        <p data-i18n="empty_subtitle">Upload your first action form to get started</p>
                     </div>
 
                     <div class="table-container" id="tableContainer" style="display: none;">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Action Code</th>
-                                    <th>Employee ID</th>
-                                    <th>Employee Name</th>
-                                    <th>Action Date</th>
-                                    <th>Department</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
+                                    <th data-i18n="th_code">Action Code</th>
+                                    <th data-i18n="th_emp_id">Employee ID</th>
+                                    <th data-i18n="th_emp_name">Employee Name</th>
+                                    <th data-i18n="th_date">Action Date</th>
+                                    <th data-i18n="th_dept">Department</th>
+                                    <th data-i18n="th_uploaded_by">Uploaded By</th>
+                                    <th data-i18n="th_status">Status</th>
+                                    <th data-i18n="th_actions">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody"></tbody>
@@ -1150,42 +1281,55 @@
             <!-- Reports Page -->
             <div class="page-content" id="page-reports">
                 <div class="content-header">
-                    <h2 class="content-title"><i class="fas fa-chart-bar"></i> Reports & Analytics</h2>
+                    <h2 class="content-title"><i class="fas fa-chart-bar"></i> <span
+                            data-i18n="reports_page_title">Reports & Analytics</span></h2>
                 </div>
 
                 <div class="report-card">
                     <div class="report-header">
-                        <div class="report-title">Forms by Department</div>
+                        <div class="report-title" data-i18n="chart_dept_title">Forms by Department</div>
                     </div>
                     <div class="chart-container">
-                        <div class="bar-chart" id="departmentChart"></div>
+                        <div class="bar-chart" id="departmentChart">
+                            <div class="skeleton-chart-bar" style="height: 60%"></div>
+                            <div class="skeleton-chart-bar" style="height: 80%"></div>
+                            <div class="skeleton-chart-bar" style="height: 40%"></div>
+                            <div class="skeleton-chart-bar" style="height: 100%"></div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="report-card">
                     <div class="report-header">
-                        <div class="report-title">Monthly Activity (Last 6 Months)</div>
+                        <div class="report-title" data-i18n="chart_monthly_title">Monthly Activity (Last 6 Months)</div>
                     </div>
                     <div class="chart-container">
-                        <div class="bar-chart" id="monthlyChart"></div>
+                        <div class="bar-chart" id="monthlyChart">
+                            <div class="skeleton-chart-bar" style="height: 30%"></div>
+                            <div class="skeleton-chart-bar" style="height: 50%"></div>
+                            <div class="skeleton-chart-bar" style="height: 70%"></div>
+                            <div class="skeleton-chart-bar" style="height: 40%"></div>
+                            <div class="skeleton-chart-bar" style="height: 90%"></div>
+                            <div class="skeleton-chart-bar" style="height: 60%"></div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="stats-grid">
                     <div class="stat-card">
                         <i class="fas fa-trophy stat-icon" style="color: #f39c12;"></i>
-                        <div class="stat-label">Most Active Dept</div>
-                        <div class="stat-value" id="topDept" style="font-size: 18px;">-</div>
+                        <div class="stat-label" data-i18n="stat_top_dept">Most Active Dept</div>
+                        <div class="stat-value skeleton skeleton-text" id="topDept" style="font-size: 18px;"></div>
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-calendar-check stat-icon" style="color: #27ae60;"></i>
-                        <div class="stat-label">Avg Forms/Month</div>
-                        <div class="stat-value" id="avgMonth">0</div>
+                        <div class="stat-label" data-i18n="stat_avg_month">Avg Forms/Month</div>
+                        <div class="stat-value skeleton skeleton-text" id="avgMonth"></div>
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-clock stat-icon" style="color: #3498db;"></i>
-                        <div class="stat-label">Latest Form</div>
-                        <div class="stat-value" id="latestForm" style="font-size: 14px;">-</div>
+                        <div class="stat-label" data-i18n="stat_latest_form">Latest Form</div>
+                        <div class="stat-value skeleton skeleton-text" id="latestForm" style="font-size: 14px;"></div>
                     </div>
                 </div>
             </div>
@@ -1193,8 +1337,10 @@
             <!-- Employees Page -->
             <div class="page-content" id="page-employees">
                 <div class="content-header">
-                    <h2 class="content-title"><i class="fas fa-users"></i> Employee Directory</h2>
-                    <div class="results-count"><span id="employeeCount">0</span> Employees</div>
+                    <h2 class="content-title"><i class="fas fa-users"></i> <span
+                            data-i18n="employees_page_title">Employee Directory</span></h2>
+                    <div class="results-count"><span id="employeeCount">0</span> <span
+                            data-i18n="nav_employees">Employees</span></div>
                 </div>
 
                 <div id="employeesList"></div>
@@ -1203,37 +1349,90 @@
             <!-- Archive Page -->
             <div class="page-content" id="page-archive">
                 <div class="content-header">
-                    <h2 class="content-title"><i class="fas fa-archive"></i> Archive</h2>
+                    <h2 class="content-title"><i class="fas fa-archive"></i> <span data-i18n="archive_title">Documents
+                            Archive</span></h2>
                 </div>
-                <div class="empty-state" style="display: block;">
-                    <i class="fas fa-archive"></i>
-                    <h3>Archive Section</h3>
-                    <p>View and manage archived documents</p>
+
+                <div class="results-section">
+                    <div id="archiveLoading" class="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p style="color: var(--text-muted);" data-i18n="loading">Loading records...</p>
+                    </div>
+
+                    <div id="archiveEmpty" class="empty-state" style="display: block;">
+                        <i class="fas fa-archive"></i>
+                        <h3 data-i18n="archive_empty_title">Archive Section</h3>
+                        <p data-i18n="archive_empty_subtitle">View and manage archived documents</p>
+                    </div>
+
+                    <div class="table-container" id="archiveTableContainer" style="display: none;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th data-i18n="th_code">Action Code</th>
+                                    <th data-i18n="th_emp_id">Employee ID</th>
+                                    <th data-i18n="th_emp_name">Employee Name</th>
+                                    <th data-i18n="th_date">Action Date</th>
+                                    <th data-i18n="th_dept">Department</th>
+                                    <th data-i18n="th_uploaded_by">Uploaded By</th>
+                                    <th data-i18n="th_actions">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="archiveTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <!-- Settings Page -->
             <div class="page-content" id="page-settings">
                 <div class="content-header">
-                    <h2 class="content-title"><i class="fas fa-cog"></i> Settings</h2>
+                    <h2 class="content-title"><i class="fas fa-cog"></i> <span data-i18n="nav_settings">Settings</span>
+                    </h2>
                 </div>
                 <div class="report-card">
-                    <h3 style="margin-bottom: 20px;">System Information</h3>
+                    <h3 style="margin-bottom: 20px;" data-i18n="system_info_title">System Information</h3>
                     <div class="info-row">
-                        <div class="info-label">System Version</div>
+                        <div class="info-label" data-i18n="info_version">System Version</div>
                         <div class="info-value">v1.0.0</div>
                     </div>
                     <div class="info-row">
-                        <div class="info-label">Database</div>
+                        <div class="info-label" data-i18n="info_db">Database</div>
                         <div class="info-value">MongoDB</div>
                     </div>
                     <div class="info-row">
-                        <div class="info-label">Logged in as</div>
+                        <div class="info-label" data-i18n="info_logged_as">Logged in as</div>
                         <div class="info-value" id="settingsUser">Rfarg</div>
                     </div>
                     <div class="info-row">
-                        <div class="info-label">Access Level</div>
+                        <div class="info-label" data-i18n="info_access">Access Level</div>
                         <div class="info-value" id="settingsRole">Administrator</div>
+                    </div>
+                </div>
+
+                <div class="report-card">
+                    <h3 style="margin-bottom: 20px;">Display Settings</h3>
+                    <div class="info-row" style="align-items: center;">
+                        <div>
+                            <div class="info-label" data-i18n="theme_mode">Theme Mode</div>
+                            <div class="info-value" id="themeStatus" data-i18n="dark_mode_on">Dark Mode Enabled</div>
+                        </div>
+                        <button class="btn btn-secondary" id="themeToggleBtn" onclick="toggleTheme()">
+                            <i class="fas fa-moon"></i> <span data-i18n="switch_theme">Switch Theme</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="report-card">
+                    <h3 style="margin-bottom: 20px;" data-i18n="language_settings">Language Settings</h3>
+                    <div class="info-row" style="align-items: center;">
+                        <div>
+                            <div class="info-label" data-i18n="system_language">System Language</div>
+                            <div class="info-value" id="languageStatus">English (US)</div>
+                        </div>
+                        <button class="btn btn-secondary" id="languageToggleBtn" onclick="toggleLanguage()">
+                            <i class="fas fa-globe"></i> <span id="langBtnText">العربية</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1241,19 +1440,20 @@
             <!-- Admin Page -->
             <div class="page-content" id="page-admin">
                 <div class="content-header">
-                    <h2 class="content-title"><i class="fas fa-user-shield"></i> User Management</h2>
+                    <h2 class="content-title"><i class="fas fa-user-shield"></i> <span data-i18n="nav_admin">User
+                            Management</span></h2>
                     <button class="btn btn-primary" onclick="openAddUserModal()">
                         <i class="fas fa-plus"></i>
-                        Add New User
+                        <span data-i18n="btn_add_user">Add New User</span>
                     </button>
                 </div>
 
                 <div class="report-card">
-                    <h3 style="margin-bottom: 20px;">User List</h3>
+                    <h3 style="margin-bottom: 20px;" data-i18n="user_list_title">User List</h3>
                     <div id="usersTable">
                         <div class="loading-state" style="display: block;">
                             <i class="fas fa-spinner fa-spin"></i>
-                            <p>Loading users...</p>
+                            <p data-i18n="loading_users">Loading users...</p>
                         </div>
                     </div>
                 </div>
@@ -1288,7 +1488,7 @@
     <div class="modal" id="uploadModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Upload Employee Action Form</h3>
+                <h3 class="modal-title" data-i18n="modal_upload_title">Upload Employee Action Form</h3>
                 <button class="close-modal" onclick="closeUploadModal()">
                     <i class="fas fa-times"></i>
                 </button>
@@ -1296,31 +1496,38 @@
             <div class="modal-body">
                 <form id="uploadForm">
                     <div class="form-group">
-                        <label class="form-label">Employee ID *</label>
-                        <input type="text" class="form-input" id="employeeId" placeholder="e.g., EMP-2024-001" required>
+                        <label class="form-label" data-i18n="label_emp_id">Employee ID *</label>
+                        <input type="text" class="form-input" id="employeeId" placeholder="e.g., EMP-2024-001"
+                            data-i18n-placeholder="placeholder_emp_id" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Employee Name *</label>
-                        <input type="text" class="form-input" id="employeeName" placeholder="Full Name" required>
+                        <label class="form-label" data-i18n="label_emp_name">Employee Name *</label>
+                        <input type="text" class="form-input" id="employeeName" placeholder="Full Name"
+                            data-i18n-placeholder="placeholder_emp_name" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Action Code</label>
-                        <input type="text" class="form-input" id="actionCode" placeholder="Auto-generated if left empty">
+                        <label class="form-label" data-i18n="label_action_code">Action Code</label>
+                        <input type="text" class="form-input" id="actionCode" placeholder="Auto-generated if left empty"
+                            data-i18n-placeholder="placeholder_action_code">
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Action Date *</label>
+                        <label class="form-label" data-i18n="label_date">Action Date *</label>
                         <input type="date" class="form-input" id="actionDate" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Department *</label>
-                        <input type="text" class="form-input" id="department" placeholder="e.g., Operations" required>
+                        <label class="form-label" data-i18n="label_dept">Department *</label>
+                        <input type="text" class="form-input" id="department" placeholder="e.g., Operations"
+                            data-i18n-placeholder="placeholder_dept" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">PDF Document *</label>
-                        <div class="file-upload" id="fileUploadArea" onclick="document.getElementById('pdfFile').click()">
+                        <label class="form-label" data-i18n="label_pdf">PDF Document *</label>
+                        <div class="file-upload" id="fileUploadArea"
+                            onclick="document.getElementById('pdfFile').click()">
                             <i class="fas fa-cloud-upload-alt"></i>
-                            <p><strong>Click to upload</strong> or drag and drop</p>
-                            <p style="font-size: 12px; margin-top: 8px;">PDF files only (Max 10MB)</p>
+                            <p><strong data-i18n="upload_click">Click to upload</strong> <span
+                                    data-i18n="upload_drag">or drag and drop</span></p>
+                            <p style="font-size: 12px; margin-top: 8px;" data-i18n="upload_limit">PDF files only (Max
+                                10MB)</p>
                             <p class="file-name" id="fileName"></p>
                             <input type="file" id="pdfFile" accept=".pdf" required>
                         </div>
@@ -1328,10 +1535,10 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeUploadModal()">Cancel</button>
+                <button class="btn btn-secondary" onclick="closeUploadModal()" data-i18n="btn_cancel">Cancel</button>
                 <button class="btn btn-primary" onclick="submitForm()">
                     <i class="fas fa-upload"></i>
-                    Upload Form
+                    <span data-i18n="btn_upload_submit">Upload Form</span>
                 </button>
             </div>
         </div>
@@ -1413,9 +1620,9 @@
             const appContainer = document.querySelector('.app-container');
             const pdfPanel = document.querySelector('.pdf-panel');
             const toggleBtn = document.querySelector('.btn-toggle-sidebar');
-            
+
             documentViewerCollapsed = !documentViewerCollapsed;
-            
+
             if (documentViewerCollapsed) {
                 appContainer.classList.add('document-viewer-collapsed');
                 pdfPanel.classList.add('collapsed');
@@ -1438,25 +1645,25 @@
                     }
                 });
                 const data = await response.json();
-                
+
                 if (!data.authenticated) {
                     localStorage.removeItem('authToken');
                     window.location.href = '/index.html';
                     return;
                 }
-                
+
                 currentUserRole = data.role;
                 document.getElementById('userName').textContent = data.username;
                 document.getElementById('settingsUser').textContent = data.username;
                 document.getElementById('settingsRole').textContent = data.role;
                 document.getElementById('userAvatar').textContent = data.username.charAt(0).toUpperCase();
-                
+
                 // Show admin nav if user is admin
                 if (currentUserRole === 'ADMIN') {
                     document.getElementById('adminNav').style.display = 'flex';
                     document.getElementById('adminSection').style.display = 'block';
                 }
-                
+
                 loadForms();
             } catch (error) {
                 window.location.href = '/index.html';
@@ -1464,68 +1671,93 @@
         }
 
         async function loadForms() {
-            try {
-                document.getElementById('loadingState').style.display = 'block';
-                document.getElementById('emptyState').style.display = 'none';
-                document.getElementById('tableContainer').style.display = 'none';
+            if (currentPage === 'archive') {
+                return loadArchivedForms();
+            }
 
-                const response = await fetch('/api/forms', {
+            const tableBody = document.getElementById('tableBody');
+            const loadingState = document.getElementById('loadingState');
+            const emptyState = document.getElementById('emptyState');
+            const tableContainer = document.getElementById('tableContainer');
+
+            tableBody.innerHTML = '';
+            loadingState.style.display = 'block';
+            emptyState.style.display = 'none';
+            tableContainer.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/forms?status=Active', {
                     credentials: 'include',
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
                     }
                 });
-                const forms = await response.json();
-                
+                const data = await response.json();
+
+                loadingState.style.display = 'none';
+
+                if (!response.ok || data.success === false) {
+                    throw new Error(data.message || 'Failed to fetch forms');
+                }
+
+                const forms = data.data && data.data.forms ? data.data.forms : [];
                 currentForms = forms;
                 renderTable(forms);
                 updateStats(forms);
                 generateReports(forms);
                 generateEmployeesList(forms);
-                
-                document.getElementById('loadingState').style.display = 'none';
-                
+
                 if (forms.length === 0) {
-                    document.getElementById('emptyState').style.display = 'block';
+                    emptyState.style.display = 'block';
                 } else {
-                    document.getElementById('tableContainer').style.display = 'block';
+                    tableContainer.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Error loading forms:', error);
-                showNotification('error', 'Error', 'Failed to load forms');
+                showNotification('error', 'Error', error.message || 'Failed to load forms');
+                if (error.message && (error.message.includes('Access denied') || error.message.includes('Authentication'))) {
+                    localStorage.removeItem('authToken');
+                    window.location.href = '/index.html';
+                }
+                loadingState.style.display = 'none';
+                emptyState.style.display = 'block';
             }
         }
 
         function renderTable(forms) {
             const tbody = document.getElementById('tableBody');
             const resultCount = document.getElementById('resultCount');
-            
+
             tbody.innerHTML = forms.map(form => `
-                <tr onclick="selectRow('${form.id}')" data-id="${form.id}">
+                <tr onclick="selectRow('${form._id}')" data-id="${form._id}">
                     <td><span class="action-code">${form.actionCode}</span></td>
                     <td><span class="employee-id">${form.employeeId}</span></td>
                     <td>${form.employeeName}</td>
                     <td>${formatDate(form.actionDate)}</td>
                     <td>${form.department}</td>
+                    <td><span style="font-size: 13px; color: var(--text-muted);"><i class="fas fa-user-circle"></i> ${form.uploadedBy ? form.uploadedBy.username : 'System'}</span></td>
                     <td><span class="status-badge">${form.status}</span></td>
                     <td>
-                        <button class="btn-delete" onclick="event.stopPropagation(); deleteForm('${form.id}')">
+                        <button class="btn-icon" onclick="event.stopPropagation(); archiveForm('${form._id}')" title="${translations[localStorage.getItem('language') || 'en'].btn_archive}">
+                            <i class="fas fa-archive"></i>
+                        </button>
+                        <button class="btn-delete" onclick="event.stopPropagation(); deleteForm('${form._id}')">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
                 </tr>
             `).join('');
-            
+
             resultCount.textContent = forms.length;
         }
 
         function updateStats(forms) {
             document.getElementById('totalForms').textContent = forms.length;
             document.getElementById('activeForms').textContent = forms.filter(f => f.status === 'Active').length;
-            
+
             const uniqueEmployees = new Set(forms.map(f => f.employeeId));
             document.getElementById('totalEmployees').textContent = uniqueEmployees.size;
-            
+
             const thisMonth = new Date().getMonth();
             const thisYear = new Date().getFullYear();
             const monthForms = forms.filter(f => {
@@ -1536,6 +1768,21 @@
         }
 
         function generateReports(forms) {
+            // Remove skeleton classes from stats
+            ['topDept', 'avgMonth', 'latestForm'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.remove('skeleton', 'skeleton-text');
+            });
+
+            if (!forms || forms.length === 0) {
+                document.getElementById('departmentChart').innerHTML = '<div style="width: 100%; text-align: center; color: var(--text-muted); padding: 50px 0; font-weight: 600;">0</div>';
+                document.getElementById('monthlyChart').innerHTML = '<div style="width: 100%; text-align: center; color: var(--text-muted); padding: 50px 0; font-weight: 600;">0</div>';
+                document.getElementById('topDept').textContent = '0';
+                document.getElementById('avgMonth').textContent = '0';
+                document.getElementById('latestForm').textContent = '0';
+                return;
+            }
+
             // Department Chart
             const deptCount = {};
             forms.forEach(form => {
@@ -1544,7 +1791,7 @@
 
             const deptChart = document.getElementById('departmentChart');
             const maxDept = Math.max(...Object.values(deptCount), 1);
-            
+
             deptChart.innerHTML = Object.entries(deptCount).map(([dept, count]) => {
                 const height = (count / maxDept) * 100;
                 return `
@@ -1560,7 +1807,7 @@
             // Monthly Chart
             const monthlyCount = {};
             const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            
+
             forms.forEach(form => {
                 const date = new Date(form.actionDate);
                 const monthKey = `${months[date.getMonth()]} ${date.getFullYear()}`;
@@ -1569,8 +1816,8 @@
 
             const monthlyChart = document.getElementById('monthlyChart');
             const sortedMonths = Object.entries(monthlyCount).slice(-6);
-            const maxMonthly = Math.max(...sortedMonths.map(([,count]) => count), 1);
-            
+            const maxMonthly = Math.max(...sortedMonths.map(([, count]) => count), 1);
+
             monthlyChart.innerHTML = sortedMonths.map(([month, count]) => {
                 const height = (count / maxMonthly) * 100;
                 return `
@@ -1600,7 +1847,7 @@
 
         function generateEmployeesList(forms) {
             const employeesMap = {};
-            
+
             forms.forEach(form => {
                 if (!employeesMap[form.employeeId]) {
                     employeesMap[form.employeeId] = {
@@ -1616,11 +1863,14 @@
             const employees = Object.values(employeesMap);
             document.getElementById('employeeCount').textContent = employees.length;
 
+            const lang = localStorage.getItem('language') || 'en';
+            const t = translations[lang];
+
             const employeesList = document.getElementById('employeesList');
             employeesList.innerHTML = employees.map(emp => {
                 const initial = emp.name.charAt(0).toUpperCase();
                 const latestForm = emp.forms.reduce((a, b) => new Date(a.actionDate) > new Date(b.actionDate) ? a : b);
-                
+
                 return `
                     <div class="employee-card" onclick='showEmployeeDetails(${JSON.stringify(emp).replace(/'/g, "&apos;")})'>
                         <div class="employee-header">
@@ -1636,15 +1886,15 @@
                         <div class="employee-stats">
                             <div class="employee-stat">
                                 <div class="employee-stat-value">${emp.forms.length}</div>
-                                <div class="employee-stat-label">Total Forms</div>
+                                <div class="employee-stat-label">${t.stat_total}</div>
                             </div>
                             <div class="employee-stat">
                                 <div class="employee-stat-value">${emp.department}</div>
-                                <div class="employee-stat-label">Department</div>
+                                <div class="employee-stat-label" data-i18n="th_dept">${t.th_dept}</div>
                             </div>
                             <div class="employee-stat">
                                 <div class="employee-stat-value" style="font-size: 14px;">${formatDate(latestForm.actionDate)}</div>
-                                <div class="employee-stat-label">Latest Activity</div>
+                                <div class="employee-stat-label">${t.stat_activity}</div>
                             </div>
                         </div>
                     </div>
@@ -1656,38 +1906,40 @@
             const modal = document.getElementById('employeeModal');
             const title = document.getElementById('employeeModalTitle');
             const body = document.getElementById('employeeModalBody');
+            const lang = localStorage.getItem('language') || 'en';
+            const t = translations[lang];
 
             title.textContent = employee.name;
-            
+
             body.innerHTML = `
                 <div style="margin-bottom: 20px;">
                     <div class="info-row">
-                        <div class="info-label">Employee ID</div>
+                        <div class="info-label">${t.th_emp_id}</div>
                         <div class="info-value">${employee.id}</div>
                     </div>
                     <div class="info-row">
-                        <div class="info-label">Department</div>
+                        <div class="info-label">${t.th_dept}</div>
                         <div class="info-value">${employee.department}</div>
                     </div>
                     <div class="info-row">
-                        <div class="info-label">Total Forms</div>
+                        <div class="info-label">${t.stat_total}</div>
                         <div class="info-value">${employee.forms.length}</div>
                     </div>
                 </div>
                 
-                <h4 style="margin-bottom: 15px; color: var(--text-primary);">Action Forms History</h4>
+                <h4 style="margin-bottom: 15px; color: var(--text-primary);">${t.modal_history_title}</h4>
                 
                 ${employee.forms.map(form => `
-                    <div class="employee-card" onclick='selectRow("${form.id}")' style="margin-bottom: 10px; cursor: pointer;">
+                    <div class="employee-card" onclick='selectRow("${form._id}")' style="margin-bottom: 10px; cursor: pointer;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div>
                                 <div class="action-code">${form.actionCode}</div>
                                 <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
-                                    ${formatDate(form.actionDate)}
+                                    ${formatDate(form.actionDate)} | <i class="fas fa-user-edit"></i> ${form.uploadedBy ? form.uploadedBy.username : 'System'}
                                 </div>
                             </div>
-                            <button class="btn-view" onclick='event.stopPropagation(); selectRow("${form.id}"); closeEmployeeModal();'>
-                                <i class="fas fa-eye"></i> View
+                            <button class="btn-view" onclick='event.stopPropagation(); selectRow("${form._id}"); closeEmployeeModal();'>
+                                <i class="fas fa-eye"></i> ${t.btn_view}
                             </button>
                         </div>
                     </div>
@@ -1724,22 +1976,27 @@
             document.querySelectorAll('tbody tr').forEach(tr => tr.classList.remove('selected'));
             const row = document.querySelector(`tbody tr[data-id="${id}"]`);
             if (row) row.classList.add('selected');
-            
-            const form = currentForms.find(f => f.id === id);
+
+            const form = currentForms.find(f => f._id === id);
             if (form) {
                 selectedForm = form;
-                loadPDF(form);
+
+                // Auto-expand viewer if collapsed
+                if (documentViewerCollapsed) {
+                    toggleDocumentViewer();
+                }
             }
         }
 
         function loadPDF(form) {
             const pdfViewer = document.getElementById('pdfViewer');
             const pdfTitle = document.getElementById('pdfTitle');
-            
+
             pdfTitle.textContent = `${form.actionCode} - ${form.employeeName}`;
             currentPDFUrl = form.filePath;
-            
-            pdfViewer.innerHTML = `<iframe class="pdf-frame" src="${form.filePath}"></iframe>`;
+
+            // Use iframe for better PDF rendering/compatibility
+            pdfViewer.innerHTML = `<iframe class="pdf-frame" src="${form.filePath}#toolbar=0&navpanes=0&scrollbar=0" width="100%" height="100%" frameborder="0"></iframe>`;
         }
 
         function downloadPDF() {
@@ -1776,10 +2033,10 @@
         }
 
         let searchTimeout;
-        document.getElementById('searchInput').addEventListener('input', function(e) {
+        document.getElementById('searchInput').addEventListener('input', function (e) {
             clearTimeout(searchTimeout);
             const query = e.target.value.trim();
-            
+
             searchTimeout = setTimeout(async () => {
                 try {
                     const response = await fetch(`/api/forms/search?q=${encodeURIComponent(query)}`, {
@@ -1808,11 +2065,11 @@
             document.getElementById('fileName').style.display = 'none';
         }
 
-        document.getElementById('pdfFile').addEventListener('change', function(e) {
+        document.getElementById('pdfFile').addEventListener('change', function (e) {
             const file = e.target.files[0];
             const fileName = document.getElementById('fileName');
             const fileUploadArea = document.getElementById('fileUploadArea');
-            
+
             if (file) {
                 fileName.textContent = `✓ ${file.name}`;
                 fileName.style.display = 'block';
@@ -1822,7 +2079,7 @@
 
         async function submitForm() {
             const form = document.getElementById('uploadForm');
-            
+
             if (!form.checkValidity()) {
                 form.reportValidity();
                 return;
@@ -1861,6 +2118,115 @@
             }
         }
 
+
+        async function loadArchivedForms() {
+            const tableBody = document.getElementById('archiveTableBody');
+            const loadingState = document.getElementById('archiveLoading');
+            const emptyState = document.getElementById('archiveEmpty');
+            const tableContainer = document.getElementById('archiveTableContainer');
+
+            tableBody.innerHTML = '';
+            loadingState.style.display = 'block';
+            emptyState.style.display = 'none';
+            tableContainer.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/forms?status=Archived', {
+                    credentials: 'include',
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                    }
+                });
+                const data = await response.json();
+
+                loadingState.style.display = 'none';
+
+                if (data.data.forms.length === 0) {
+                    emptyState.style.display = 'block';
+                } else {
+                    tableContainer.style.display = 'block';
+                    currentForms = data.data.forms;
+                    renderArchiveTable(data.data.forms);
+                }
+            } catch (error) {
+                console.error('Load archive error:', error);
+                loadingState.style.display = 'none';
+                emptyState.style.display = 'block';
+            }
+        }
+
+        function renderArchiveTable(forms) {
+            const tableBody = document.getElementById('archiveTableBody');
+            const lang = localStorage.getItem('language') || 'en';
+            const t = translations[lang];
+
+            tableBody.innerHTML = forms.map(form => `
+                <tr data-id="${form._id}">
+                    <td>${form.actionCode}</td>
+                    <td>${form.employeeId}</td>
+                    <td>${form.employeeName}</td>
+                    <td>${formatDate(form.actionDate)}</td>
+                    <td>${form.department}</td>
+                    <td><span style="font-size: 13px; color: var(--text-muted);"><i class="fas fa-user-circle"></i> ${form.uploadedBy ? form.uploadedBy.username : 'System'}</span></td>
+                    <td>
+                        <button class="btn-icon" onclick="selectRow('${form._id}')" title="${lang === 'en' ? 'View' : 'عرض'}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn-icon" onclick="restoreForm('${form._id}')" title="${t.btn_restore || 'Restore'}">
+                            <i class="fas fa-undo"></i>
+                        </button>
+                        <button class="btn-delete" onclick="event.stopPropagation(); deleteForm('${form._id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function archiveForm(id) {
+            if (!confirm(localStorage.getItem('language') === 'ar' ? 'هل أنت متأكد من أرشفة هذا المستند؟' : 'Are you sure you want to archive this document?')) return;
+
+            try {
+                const response = await fetch(`/api/forms/${id}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                    },
+                    body: JSON.stringify({ status: 'Archived' })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    const lang = localStorage.getItem('language') || 'en';
+                    showNotification('success', translations[lang].notif_archived, translations[lang].notif_archived);
+                    loadForms();
+                }
+            } catch (error) {
+                console.error('Archive error:', error);
+            }
+        }
+
+        async function restoreForm(id) {
+            try {
+                const response = await fetch(`/api/forms/${id}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
+                    },
+                    body: JSON.stringify({ status: 'Active' })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    const lang = localStorage.getItem('language') || 'en';
+                    showNotification('success', translations[lang].notif_restored, translations[lang].notif_restored);
+                    loadArchivedForms();
+                }
+            } catch (error) {
+                console.error('Restore error:', error);
+            }
+        }
+
         async function deleteForm(id) {
             if (!confirm('Are you sure you want to delete this form? This action cannot be undone.')) {
                 return;
@@ -1880,8 +2246,9 @@
                 if (data.success) {
                     showNotification('success', 'Deleted', 'Form deleted successfully');
                     loadForms();
-                    
-                    if (selectedForm && selectedForm.id === id) {
+                    loadArchivedForms();
+
+                    if (selectedForm && selectedForm._id === id) {
                         document.getElementById('pdfViewer').innerHTML = `
                             <div class="pdf-placeholder">
                                 <i class="fas fa-file-pdf"></i>
@@ -1951,8 +2318,324 @@
             return new Date(dateString).toLocaleDateString('en-US', options);
         }
 
+        // Language Localization Logic
+        const translations = {
+            en: {
+                app_title: "Mabruk Oil Operations",
+                app_subtitle: "HR Management System",
+                search_placeholder: "Search by Employee ID, Name, or Action Code...",
+                toggle_viewer: "Toggle Document Viewer",
+                logout: "Logout",
+                main_menu: "Main Menu",
+                nav_forms: "Action Forms",
+                nav_reports: "Reports",
+                nav_employees: "Employees",
+                tools: "Tools",
+                nav_archive: "Archive",
+                nav_settings: "Settings",
+                admin_menu: "Admin",
+                nav_admin: "User Management",
+                forms_title: "Employee Action Forms",
+                btn_upload: "Upload New Form",
+                stat_total: "Total Forms",
+                stat_month: "This Month",
+                stat_employees: "Employees",
+                stat_active: "Active Forms",
+                registry_title: "Action Forms Registry",
+                records: "Records",
+                loading: "Loading records...",
+                empty_title: "No Forms Yet",
+                empty_subtitle: "Upload your first action form to get started",
+                th_code: "Action Code",
+                th_emp_id: "Employee ID",
+                th_emp_name: "Employee Name",
+                th_date: "Action Date",
+                th_dept: "Department",
+                th_uploaded_by: "Uploaded By",
+                th_status: "Status",
+                th_actions: "Actions",
+                reports_page_title: "Reports & Analytics",
+                chart_dept_title: "Forms by Department",
+                chart_monthly_title: "Monthly Activity (Last 6 Months)",
+                stat_top_dept: "Most Active Dept",
+                stat_avg_month: "Avg Forms/Month",
+                stat_latest_form: "Latest Form",
+                employees_page_title: "Employee Directory",
+                archive_empty_title: "Archive Section",
+                archive_empty_subtitle: "View and manage archived documents",
+                system_info_title: "System Information",
+                info_version: "System Version",
+                info_db: "Database",
+                info_logged_as: "Logged in as",
+                info_access: "Access Level",
+                btn_add_user: "Add New User",
+                user_list_title: "User List",
+                loading_users: "Loading users...",
+                theme_mode: "Theme Mode",
+                dark_mode_on: "Dark Mode Enabled",
+                light_mode_on: "Light Mode Enabled",
+                switch_theme: "Switch Theme",
+                language_settings: "Language Settings",
+                system_language: "System Language",
+                modal_upload_title: "Upload Employee Action Form",
+                label_emp_id: "Employee ID *",
+                placeholder_emp_id: "e.g., EMP-2024-001",
+                label_emp_name: "Employee Name *",
+                placeholder_emp_name: "Full Name",
+                label_action_code: "Action Code",
+                placeholder_action_code: "Auto-generated if left empty",
+                label_date: "Action Date *",
+                label_dept: "Department *",
+                placeholder_dept: "e.g., Operations",
+                label_pdf: "PDF Document *",
+                upload_click: "Click to upload",
+                upload_drag: "or drag and drop",
+                upload_limit: "PDF files only (Max 10MB)",
+                btn_cancel: "Cancel",
+                btn_upload_submit: "Upload Form",
+                notif_theme: "Theme",
+                notif_language: "Language",
+                notif_switched_to: "Switched to",
+                reports_page_title: "Reports & Analytics",
+                chart_dept_title: "Forms by Department",
+                chart_monthly_title: "Monthly Activity (Last 6 Months)",
+                stat_top_dept: "Most Active Dept",
+                stat_avg_month: "Avg Forms/Month",
+                stat_latest_form: "Latest Form",
+                employees_page_title: "Employee Directory",
+                archive_empty_title: "Archive Section",
+                archive_empty_subtitle: "View and manage archived documents",
+                archive_title: "Documents Archive",
+                btn_archive: "Archive",
+                btn_restore: "Restore",
+                btn_delete_perm: "Delete Permanently",
+                notif_archived: "Form archived successfully",
+                notif_restored: "Form restored successfully",
+                system_info_title: "System Information",
+                info_version: "System Version",
+                info_db: "Database",
+                info_logged_as: "Logged in as",
+                info_access: "Access Level",
+                btn_add_user: "Add New User",
+                user_list_title: "User List",
+                loading_users: "Loading users...",
+                th_username: "Username",
+                th_email: "Email",
+                th_role: "Role",
+                th_last_login: "Last Login",
+                status_active: "Active",
+                status_inactive: "Inactive",
+                stat_activity: "Latest Activity",
+                modal_history_title: "Action Forms History",
+                btn_view: "View",
+                notif_nav_viewing: "Viewing",
+                confirm_deactivate: "Are you sure you want to deactivate this user?",
+                confirm_activate: "Are you sure you want to activate this user?",
+                confirm_delete_user: "Are you sure you want to delete this user? This action cannot be undone.",
+                confirm_delete_form: "Are you sure you want to delete this form? This action cannot be undone.",
+                success_user_added: "User added successfully",
+                success_user_status: "User status updated successfully",
+                success_user_deleted: "User deleted successfully",
+                success_form_uploaded: "Form uploaded successfully",
+                success_form_deleted: "Form deleted successfully",
+                error_select_doc: "Please select a document first",
+                label_select_role: "Select Role"
+            },
+            ar: {
+                app_title: " المبروك للعمليات النفطية",
+                app_subtitle: "نظام إدارة الموارد البشرية",
+                search_placeholder: "ابحث عن طريق رقم الموظف، الاسم، أو رمز الإجراء...",
+                toggle_viewer: "تبديل عرض المستندات",
+                logout: "تسجيل الخروج",
+                main_menu: "القائمة الرئيسية",
+                nav_forms: "نماذج الإجراءات",
+                nav_reports: "التقارير",
+                nav_employees: "الموظفين",
+                tools: "الأدوات",
+                nav_archive: "الأرشيف",
+                nav_settings: "الإعدادات",
+                admin_menu: "الإدارة",
+                nav_admin: "إدارة المستخدمين",
+                forms_title: "نماذج إجراءات الموظفين",
+                btn_upload: "رفع نموذج جديد",
+                stat_total: "إجمالي النماذج",
+                stat_month: "هذا الشهر",
+                stat_employees: "الموظفين",
+                stat_active: "النماذج النشطة",
+                registry_title: "سجل نماذج الإجراءات",
+                records: "سجلات",
+                loading: "جاري تحميل السجلات...",
+                empty_title: "لا توجد نماذج بعد",
+                empty_subtitle: "ارفع أول نموذج إجراء للبدء",
+                th_code: "رمز الإجراء",
+                th_emp_id: "رقم الموظف",
+                th_emp_name: "اسم الموظف",
+                th_date: "تاريخ الإجراء",
+                th_dept: "القسم",
+                th_uploaded_by: "بواسطة",
+                th_status: "الحالة",
+                th_actions: "العمليات",
+                theme_mode: "وضع المظهر",
+                dark_mode_on: "الوضع الداكن مفعل",
+                light_mode_on: "الوضع الفاتح مفعل",
+                switch_theme: "تغيير المظهر",
+                language_settings: "إعدادات اللغة",
+                system_language: "لغة النظام",
+                modal_upload_title: "رفع نموذج إجراء موظف",
+                label_emp_id: "رقم الموظف *",
+                placeholder_emp_id: "مثال: EMP-2024-001",
+                label_emp_name: "اسم الموظف *",
+                placeholder_emp_name: "الاسم الكامل",
+                label_action_code: "رمز الإجراء",
+                placeholder_action_code: "يتم توليده تلقائياً إذا ترك فارغاً",
+                label_date: "تاريخ الإجراء *",
+                label_dept: "القسم *",
+                placeholder_dept: "مثال: العمليات",
+                label_pdf: "وثيقة PDF *",
+                upload_click: "اضغط للرفع",
+                upload_drag: "أو اسحب وأفلت",
+                upload_limit: "ملفات PDF فقط (الحد الأقصى 10 ميجا)",
+                btn_cancel: "إلغاء",
+                btn_upload_submit: "رفع النموذج",
+                notif_theme: "المظهر",
+                notif_language: "اللغة",
+                notif_switched_to: "تم التغيير إلى",
+                reports_page_title: "التقارير والتحليلات",
+                chart_dept_title: "النماذج حسب القسم",
+                chart_monthly_title: "النشاط الشهري (آخر 6 أشهر)",
+                stat_top_dept: "القسم الأكثر نشاطاً",
+                stat_avg_month: "متوسط النماذج/الشهر",
+                stat_latest_form: "أحدث نموذج",
+                employees_page_title: "دليل الموظفين",
+                archive_empty_title: "قسم الأرشيف",
+                archive_empty_subtitle: "عرض وإدارة المستندات المؤرشفة",
+                archive_title: "أرشيف المستندات",
+                btn_archive: "أرشفة",
+                btn_restore: "استعادة",
+                btn_delete_perm: "حذف نهائي",
+                notif_archived: "تم أرشفة النموذج بنجاح",
+                notif_restored: "تم استعادة النموذج بنجاح",
+                system_info_title: "معلومات النظام",
+                info_version: "إصدار النظام",
+                info_db: "قاعدة البيانات",
+                info_logged_as: "متصل كـ",
+                info_access: "مستوى الصلاحية",
+                btn_add_user: "إضافة مستخدم جديد",
+                user_list_title: "قائمة المستخدمين",
+                loading_users: "جاري تحميل المستخدمين...",
+                th_username: "اسم المستخدم",
+                th_email: "البريد الإلكتروني",
+                th_role: "الدور",
+                th_last_login: "آخر دخول",
+                status_active: "نشط",
+                status_inactive: "غير نشط",
+                stat_activity: "آخر نشاط",
+                modal_history_title: "سجل نماذج الإجراءات",
+                btn_view: "عرض",
+                notif_nav_viewing: "عرض صفحة",
+                confirm_deactivate: "هل أنت متأكد من إلغاء تفعيل هذا المستخدم؟",
+                confirm_activate: "هل أنت متأكد من تفعيل هذا المستخدم؟",
+                confirm_delete_user: "هل أنت متأكد من حذف هذا المستخدم؟ لا يمكن التراجع عن هذا الإجراء.",
+                confirm_delete_form: "هل أنت متأكد من حذف هذا النموذج؟ لا يمكن التراجع عن هذا الإجراء.",
+                success_user_added: "تم إضافة المستخدم بنجاح",
+                success_user_status: "تم تحديث حالة المستخدم بنجاح",
+                success_user_deleted: "تم حذف المستخدم بنجاح",
+                success_form_uploaded: "تم رفع النموذج بنجاح",
+                success_form_deleted: "تم حذف النموذج بنجاح",
+                error_select_doc: "يرجى اختيار مستند أولاً",
+                label_select_role: "اختر الدور"
+            }
+        };
+
+        function toggleLanguage() {
+            const currentLang = localStorage.getItem('language') || 'en';
+            const newLang = currentLang === 'en' ? 'ar' : 'en';
+            applyLanguage(newLang);
+            showNotification('info', translations[newLang].notif_language, `${translations[newLang].notif_switched_to} ${newLang === 'en' ? 'English' : 'العربية'}`);
+        }
+
+        function applyLanguage(lang) {
+            localStorage.setItem('language', lang);
+            document.body.classList.toggle('rtl', lang === 'ar');
+
+            // Update all elements with data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            // Update all placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) {
+                    el.placeholder = translations[lang][key];
+                }
+            });
+
+            // Update titles (tooltips)
+            document.querySelectorAll('[data-i18n-title]').forEach(el => {
+                const key = el.getAttribute('data-i18n-title');
+                if (translations[lang][key]) {
+                    el.title = translations[lang][key];
+                }
+            });
+
+            updateLanguageUI(lang);
+        }
+
+        function updateLanguageUI(lang) {
+            const status = document.getElementById('languageStatus');
+            const btnText = document.getElementById('langBtnText');
+            if (status && btnText) {
+                status.textContent = lang === 'en' ? 'English (US)' : 'العربية (Arabic)';
+                btnText.textContent = lang === 'en' ? 'العربية' : 'English';
+            }
+        }
+
+        function initLanguage() {
+            const savedLang = localStorage.getItem('language') || 'en';
+            applyLanguage(savedLang);
+        }
+
+        // Theme Toggle Logic
+        function toggleTheme() {
+            const isLightMode = document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+            updateThemeUI(isLightMode);
+            const lang = localStorage.getItem('language') || 'en';
+            showNotification('info', translations[lang].notif_theme, `${translations[lang].notif_switched_to} ${isLightMode ? 'Light' : 'Dark'}`);
+        }
+
+        function updateThemeUI(isLightMode) {
+            const btn = document.getElementById('themeToggleBtn');
+            const status = document.getElementById('themeStatus');
+            const lang = localStorage.getItem('language') || 'en';
+            if (btn && status) {
+                btn.innerHTML = isLightMode ? '<i class="fas fa-sun"></i> <span data-i18n="switch_theme">' + translations[lang].switch_theme + '</span>' : '<i class="fas fa-moon"></i> <span data-i18n="switch_theme">' + translations[lang].switch_theme + '</span>';
+                status.textContent = isLightMode ? translations[lang].light_mode_on : translations[lang].dark_mode_on;
+            }
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const isLightMode = savedTheme === 'light';
+            if (isLightMode) {
+                document.body.classList.add('light-mode');
+            }
+            updateThemeUI(isLightMode);
+        }
+
         // Admin functions
         async function loadUsers() {
+            const usersTable = document.getElementById('usersTable');
+            usersTable.innerHTML = `
+                <div class="loading-state" style="display: block; text-align: center; padding: 40px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: var(--primary-color);"></i>
+                    <p style="margin-top: 10px; color: var(--text-muted);">Loading users...</p>
+                </div>
+            `;
             try {
                 const response = await fetch('/api/admin/users', {
                     credentials: 'include',
@@ -1960,31 +2643,42 @@
                         Authorization: `Bearer ${localStorage.getItem('authToken') || ''}`
                     }
                 });
+
                 const data = await response.json();
 
-                if (data.success) {
-                    renderUsersTable(data.data);
-                } else {
-                    showNotification('error', 'Error', 'Failed to load users');
+                if (!response.ok || data.success === false) {
+                    throw new Error(data.message || 'Failed to load users');
                 }
+
+                renderUsersTable(data.data);
             } catch (error) {
-                showNotification('error', 'Error', 'Failed to load users');
+                showNotification('error', 'Error', error.message || 'Failed to load users');
                 console.error('Load users error:', error);
+                usersTable.innerHTML = `
+                    <div class="empty-state" style="display: block;">
+                        <i class="fas fa-exclamation-circle" style="color: var(--danger); font-size: 48px; margin-bottom: 15px;"></i>
+                        <h3>Error Loading Users</h3>
+                        <p style="color: var(--text-muted);">${error.message || 'Failed to load users. Please try again.'}</p>
+                    </div>
+                `;
             }
         }
 
         function renderUsersTable(users) {
             const usersTable = document.getElementById('usersTable');
+            const lang = localStorage.getItem('language') || 'en';
+            const t = translations[lang];
+
             usersTable.innerHTML = `
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Last Login</th>
-                            <th>Actions</th>
+                            <th data-i18n="th_username">${t.th_username}</th>
+                            <th data-i18n="th_email">${t.th_email}</th>
+                            <th data-i18n="th_role">${t.th_role}</th>
+                            <th data-i18n="th_status">${t.th_status}</th>
+                            <th data-i18n="th_last_login">${t.th_last_login}</th>
+                            <th data-i18n="th_actions">${t.th_actions}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1993,13 +2687,13 @@
                                 <td>${user.username}</td>
                                 <td>${user.email}</td>
                                 <td>${user.role ? user.role.name : 'N/A'}</td>
-                                <td><span class="status-badge ${user.isActive ? 'active' : 'inactive'}">${user.isActive ? 'Active' : 'Inactive'}</span></td>
-                                <td>${user.lastLogin ? formatDate(user.lastLogin) : 'Never'}</td>
+                                <td><span class="status-badge ${user.isActive ? 'active' : 'inactive'}">${user.isActive ? t.status_active : t.status_inactive}</span></td>
+                                <td>${user.lastLogin ? formatDate(user.lastLogin) : (lang === 'en' ? 'Never' : 'أبداً')}</td>
                                 <td>
-                                    <button class="btn-icon" onclick="toggleUserStatus('${user._id}', ${user.isActive})" title="${user.isActive ? 'Deactivate' : 'Activate'}">
+                                    <button class="btn-icon" onclick="toggleUserStatus('${user._id}', ${user.isActive})" title="${user.isActive ? (lang === 'en' ? 'Deactivate' : 'إلغاء تفعيل') : (lang === 'en' ? 'Activate' : 'تفعيل')}">
                                         <i class="fas ${user.isActive ? 'fa-ban' : 'fa-check'}"></i>
                                     </button>
-                                    <button class="btn-icon" onclick="deleteUser('${user._id}')" title="Delete">
+                                    <button class="btn-icon" onclick="deleteUser('${user._id}')" title="${lang === 'en' ? 'Delete' : 'حذف'}">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
@@ -2044,7 +2738,7 @@
 
         async function submitAddUser() {
             const form = document.getElementById('addUserForm');
-            
+
             if (!form.checkValidity()) {
                 form.reportValidity();
                 return;
@@ -2155,19 +2849,25 @@
 
             // Show selected page
             document.getElementById(`page-${pageName}`).classList.add('active');
-            event.currentTarget.classList.add('active');
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
 
             currentPage = pageName;
-            
+
             // Load data for specific pages
             if (pageName === 'admin') {
                 loadUsers();
+            } else if (pageName === 'forms' || pageName === 'archive' || pageName === 'reports' || pageName === 'employees') {
+                loadForms();
             }
-            
-            showNotification('info', 'Navigation', `Viewing ${pageName.replace('-', ' ')}`);
+
+            const lang = localStorage.getItem('language') || 'en';
+            const t = translations[lang];
+            showNotification('info', t.notif_nav_viewing, `${t.notif_nav_viewing} ${pageName.replace('-', ' ')}`);
         }
 
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const uploadModal = document.getElementById('uploadModal');
             const employeeModal = document.getElementById('employeeModal');
             const addUserModal = document.getElementById('addUserModal');
@@ -2183,6 +2883,9 @@
         }
 
         checkAuth();
+        initTheme();
+        initLanguage();
     </script>
 </body>
+
 </html>
