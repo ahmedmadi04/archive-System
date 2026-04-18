@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Delete, Patch, Param, Query, Body, UseGuards, UseInterceptors, UploadedFile, Req } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { Controller, Get, Post, Delete, Patch, Param, Query, Body, UseGuards, Req, BadRequestException } from '@nestjs/common';
+import * as util from 'util';
+import * as stream from 'stream';
+const pipeline = util.promisify(stream.pipeline);
 import { FormsService } from './forms.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -44,22 +45,35 @@ export class FormsController {
 
   @Post()
   @RequirePermission('forms_create')
-  @UseInterceptors(FileInterceptor('pdfFile', {
-    storage: diskStorage({
-      destination: uploadsDir,
-      filename: (req, file, cb) => {
+  async create(@Req() req: any) {
+    if (!req.isMultipart()) {
+      throw new BadRequestException('Request is not multipart');
+    }
+
+    const body: any = {};
+    let fileMock: any = null;
+
+    for await (const part of req.parts()) {
+      if (part.type === 'file') {
+        if (part.mimetype !== 'application/pdf') {
+          throw new BadRequestException('Only PDF allowed');
+        }
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, 'form-' + uniqueSuffix + '.pdf');
+        const filename = 'form-' + uniqueSuffix + '.pdf';
+        const filePath = path.join(uploadsDir, filename);
+
+        await pipeline(part.file, fs.createWriteStream(filePath));
+        fileMock = { filename, path: filePath, mimetype: part.mimetype };
+      } else {
+        body[part.fieldname] = part.value;
       }
-    }),
-    fileFilter: (req, file, cb) => {
-      if (file.mimetype === 'application/pdf') cb(null, true);
-      else cb(new Error('Only PDF allowed'), false);
-    },
-    limits: { fileSize: 10 * 1024 * 1024 }
-  }))
-  create(@Body() body: any, @UploadedFile() file: Express.Multer.File, @Req() req: any) {
-    return this.formsService.createForm(body, file, req.user);
+    }
+
+    if (!fileMock) {
+      throw new BadRequestException('Missing pdfFile');
+    }
+
+    return this.formsService.createForm(body, fileMock, req.user);
   }
 
   @Delete(':id')

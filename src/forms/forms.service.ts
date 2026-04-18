@@ -50,7 +50,7 @@ export class FormsService {
     return { success: true, message: `Form status updated to ${status}`, data: { form } };
   }
 
-  async createForm(createDto: any, file: Express.Multer.File, user: any) {
+  async createForm(createDto: any, file: any, user: any) {
     if (!file) throw new BadRequestException('No file uploaded');
 
     try {
