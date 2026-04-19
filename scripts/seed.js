@@ -1,8 +1,11 @@
+// require('ts-node/register'); - Removed for pure JS
+
 const mongoose = require('mongoose');
-const User = require('./models/User');
-const Role = require('./models/Role');
-const Permission = require('./models/Permission');
+const { User } = require('../src/schemas/user.schema');
+const { Role } = require('../src/schemas/role.schema');
+const { Permission } = require('../src/schemas/permission.schema');
 require('dotenv').config();
+
 
 const seedDatabase = async () => {
     try {
@@ -11,7 +14,15 @@ const seedDatabase = async () => {
 
         console.log('🌱 Seeding database...');
 
+        // Clear existing data for fresh seed
+        await User.deleteMany({});
+        await Permission.deleteMany({});
+        await Role.deleteMany({});
+        console.log('✓ Cleared existing users, permissions and roles');
+
+
         // Create permissions
+
         const permissions = [
             // Forms permissions
             { name: 'forms_create', description: 'Create new forms', resource: 'forms', action: 'create' },
@@ -32,13 +43,16 @@ const seedDatabase = async () => {
         console.log('Creating permissions...');
         const createdPermissions = [];
         for (const perm of permissions) {
-            let permission = await Permission.findOne({ name: perm.name });
-            if (!permission) {
-                permission = await Permission.create(perm);
-                console.log(`✓ Created permission: ${perm.name}`);
-            }
+            const permission = await Permission.create({
+                ...perm,
+                name: perm.name.toUpperCase()
+            });
+            console.log(`✓ Created permission: ${permission.name}`);
             createdPermissions.push(permission);
         }
+
+
+
 
         // Create roles
         const roles = [
